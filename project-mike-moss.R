@@ -59,7 +59,7 @@ for (var in unique(dat$congress))
   plt[[var]] <<- pl_tmp
 })
 # Now we can access all the plots like this:
-plt[[113]] # And just replace the number 50 with any congress number 1 - 113.
+plt[[90]] # And just replace the number 50 with any congress number 1 - 113.
 
 # Note: As I have it rightn now, the colors for the party codes are not unique across all congress numbers. 
 # Meaning that some colors are repeated later for a different party. This is not ideal. I believe the way to
@@ -70,24 +70,31 @@ plt[[113]] # And just replace the number 50 with any congress number 1 - 113.
 # install.packages("gifski")
 library(gganimate)
 library(gifski)
+
 # I can use the gganimate option of "transition_states"
-congresstime <- ggplot( dat, aes(x = dat$nominate_dim1, y =dat$nominate_dim2,color=dat$party_code),asp=1) +
+congresstime <- ggplot( dat, aes(x = dat$nominate_dim1, y =dat$nominate_dim2,color=factor(dat$party_code)),asp=1) +
   geom_point()+
   annotate("path",x=cos(seq(0,2*pi,length.out=100)),y=sin(seq(0,2*pi,length.out=100)))+
-  geom_hline(yintercept =0) + geom_vline(xintercept=0)+
+  geom_hline(yintercept=0) + geom_vline(xintercept=0)+
   xlab("DWNominate Dim. 1") + ylab("DWNominate Dim. 2")+
-  labs(title='Congress Number {dat$congress}',color="Party Code")#+
-  #transition_states(dat$congress,transition_length = 2,state_length = 1)
+  transition_states(dat$congress,transition_length = 1,state_length = 1)+
+  labs(color="Party Code")+
+  ggtitle('Congress Number {closest_state}')
 
-#animate(congresstime[[1]]) # This takes a long time to animate. 
-# Now it shows a color bar for all the Party Code (uniquely colored), 
+# This takes a long time to animate. 
+# animate(congresstime,nframes = 232)
+# Once you animate it, right click on it and save the image so you don't have to run this again! 
+
+
+# I can show a color bar for all the Party Code (uniquely colored) by removing the factor() from color option 
 # but I don't think it has much meaning at the moment.
-congresstime
+
 # Now I want to parameterize the groups somehow. Maybe some Network analysis things.
 # Then I can make another movie of that parameter and play the two side by side. 
 
 # Network Analysis Section:
 
+# Animate paramters from network analysis
 
 # Can we view both animations? 
 
