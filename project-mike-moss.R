@@ -1,3 +1,7 @@
+# Required Packages
+if(!requireNamespace("plotrix")) install.packages("plotrix")
+if(!requireNamespace("gifski")) install.packages("gifski")
+if(!requireNamespace("gganimate")) install.packages("gganimate")
 # First we need to import the data to R.
 # Right now the data is all stored in a CSV file. It is in the same folder that I have this R file saved in.
 
@@ -66,8 +70,6 @@ plt[[113]] # And just replace the number 50 with any congress number 1 - 113.
 # fix this would be to make an array that had all the unique party codes given specific colors.
 
 # and I can make a movie, but I will need to install some animation packages.
-# install.packages('gganimate')
-# install.packages("gifski")
 library(gganimate)
 library(gifski)
 # I can use the gganimate option of "transition_states"
@@ -76,13 +78,13 @@ congresstime <- ggplot( dat, aes(x = dat$nominate_dim1, y =dat$nominate_dim2,col
   annotate("path",x=cos(seq(0,2*pi,length.out=100)),y=sin(seq(0,2*pi,length.out=100)))+
   geom_hline(yintercept =0) + geom_vline(xintercept=0)+
   xlab("DWNominate Dim. 1") + ylab("DWNominate Dim. 2")+
-  labs(title='Congress Number {dat$congress}',color="Party Code")#+
+  labs(title=paste('Congress Number', dat$congress),color="Party Code")#+
   #transition_states(dat$congress,transition_length = 2,state_length = 1)
 
-#animate(congresstime[[1]]) # This takes a long time to animate. 
+anima<-animate(congresstime[[1]]) # This takes a long time to animate. 
 # Now it shows a color bar for all the Party Code (uniquely colored), 
 # but I don't think it has much meaning at the moment.
-congresstime
+anim_save("congress.gif",anima)
 # Now I want to parameterize the groups somehow. Maybe some Network analysis things.
 # Then I can make another movie of that parameter and play the two side by side. 
 
