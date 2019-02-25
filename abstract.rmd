@@ -1,5 +1,5 @@
 ---
-title: "Parisan Polerization"
+title: "Parisian Polarization"
 author: "Marguerita Ten Houten, Mike Moss, \\
 
 Ethan Rooney, Mary Terese Sweitzer"
