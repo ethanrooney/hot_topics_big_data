@@ -1,0 +1,15 @@
+---
+title: "Parisan Polerization"
+author: "Marguerita Ten Houten, Mike Moss, \\
+
+Ethan Rooney, Mary Terese Sweitzer"
+date: "2019-02-26"
+---
+\pagenumbering{gobble}
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The increasing polarization of political parties has an outsized effect on electoral constituencies, policy views, media coverage, and policy passage within Congress. As partisan polarization increases, intense competition for control of the chambers and the relative size of majorities grow (Theriault 2008). Understanding partisan polarization is important from both a practical perspective, since it is related to potential legislation and voter preference representation, and from an academic perspective, since studying the discipline deepens knowledge and understanding of one of the most powerful forces operating on people, communities, and corporations today. In recent years, Congressional politics has become more nationalized, with members’ roll call records determined more by their party affiliation than by representation of their geographical constituency and its preferences (Caughey, Dunham, and Warshaw 2018). Given what we know about increasing polarization and tribalism between the parties, the liberal-conservative spectrum will be our focus when conducting aggregate analyses. 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Data visualization is a powerful tool for understanding how variables interact, form a network, and tell a story.  As such, in this project, we will analyze partisan polarization using a dataset of every congressional roll call vote in American history--Poole and Rosenthal’s DW-NOMINATE scores. The primary dimension used is an ideological scale of “liberal” vs. “conservative”, and the secondary dimension picks up differences within the major political parties over key issues during periods of American history (e.g., slavery, currency, nativism, civil rights, and lifestyle issues). Utilizing this dataset, we will explore plotting the dimensionality of DW-NOMINATE scores over time, using networks to see the partisan movement of members of Congress, plotting ideology to explore potential episodes of partisan exogenous shocks, or “burstiness”, and using edge and node visualization to further understand the amount of party homophily and same partisan affiliation. 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The resulting visualizations will give information on a complex system with a non-trivial network structure, non-normal distributions, and non-Poisson timing of events. It will be an important attempt to highlight and acknowledge the divisions, and unity, between Congressional partisans. We hope to tell a story with data about the growing rift between American ideological entities.
+
