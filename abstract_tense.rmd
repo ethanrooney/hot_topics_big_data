@@ -1,10 +1,11 @@
 ﻿---
 title: "Repulsive Politics: American Partisan Polarization"
-author: "Marguerita Ten Houten, Mike Moss, \\
-
-Ethan Rooney, Mary Terese Sweitzer"
-date: "2019-02-26"
-geometry: margin=4cm
+author: |
+  | Marguerita Ten Houten--Public Policy
+  | Mike Moss--Astrophysics
+  | Ethan Rooney--Physics Undergraduate
+  | Mary Terese Sweitzer--Nuclear Security
+geometry: margin=3cm
 ---
 \pagenumbering{gobble}
 
