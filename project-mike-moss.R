@@ -81,10 +81,12 @@ congresstime <- ggplot( dat, aes(x = dat$nominate_dim1, y =dat$nominate_dim2,col
   labs(title=paste('Congress Number', dat$congress),color="Party Code")#+
   #transition_states(dat$congress,transition_length = 2,state_length = 1)
 
-anima<-animate(congresstime[[1]]) # This takes a long time to animate. 
+
+
+anim_save("movie.gif",congresstime + transition_time(dat$congress))
+
 # Now it shows a color bar for all the Party Code (uniquely colored), 
 # but I don't think it has much meaning at the moment.
-anim_save("congress.gif",anima)
 # Now I want to parameterize the groups somehow. Maybe some Network analysis things.
 # Then I can make another movie of that parameter and play the two side by side. 
 
