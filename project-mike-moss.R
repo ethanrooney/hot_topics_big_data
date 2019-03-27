@@ -1,8 +1,14 @@
+
+
+#############################
+# Initial Data Processing
+
 # First we need to import the data to R.
 # Right now the data is all stored in a CSV file. It is in the same folder that I have this R file saved in.
 
 # Load CSV data 
-dat = read.csv("HSall_members.csv", header = TRUE)
+## Make sure you specify the correct path to where your data is stored! 
+dat = read.csv("../project/project-directory/HSall_members.csv", header = TRUE)
 
 # In case you want to see the top 5 lines of the CSV file (Across all columns): head(dat)
 
@@ -65,42 +71,111 @@ plt[[90]] # And just replace the number 50 with any congress number 1 - 113.
 # Meaning that some colors are repeated later for a different party. This is not ideal. I believe the way to
 # fix this would be to make an array that had all the unique party codes given specific colors.
 
-# and I can make a movie, but I will need to install some animation packages.
+
+
+#############################
+# Make an Animation
+
+
+
 # install.packages('gganimate')
 # install.packages("gifski")
 library(gganimate)
 library(gifski)
 
 # I can use the gganimate option of "transition_states"
-congresstime <- ggplot( dat, aes(x = dat$nominate_dim1, y =dat$nominate_dim2,color=factor(dat$party_code)),asp=1) +
+congresstime <- ggplot( dat, aes(x = dat$nominate_dim1, y =dat$nominate_dim2,color=factor(dat$party_code))) +
   geom_point()+
+  coord_fixed()+
   annotate("path",x=cos(seq(0,2*pi,length.out=100)),y=sin(seq(0,2*pi,length.out=100)))+
   geom_hline(yintercept=0) + geom_vline(xintercept=0)+
   xlab("DWNominate Dim. 1") + ylab("DWNominate Dim. 2")+
-  transition_states(dat$congress,transition_length = 1,state_length = 1)+
+  transition_states(dat$congress,transition_length = 1,state_length = 2)+
   labs(color="Party Code")+
   ggtitle('Congress Number {closest_state}')
 
 # This takes a long time to animate. 
-# animate(congresstime,nframes = 232)
+# animate(congresstime,nframes = 116*3)
 # Once you animate it, right click on it and save the image so you don't have to run this again! 
-
 
 # I can show a color bar for all the Party Code (uniquely colored) by removing the factor() from color option 
 # but I don't think it has much meaning at the moment.
 
+
+#############################
+# Group Parameters
+
+
 # Now I want to parameterize the groups somehow. Maybe some Network analysis things.
 # Then I can make another movie of that parameter and play the two side by side. 
 
-# Network Analysis Section:
-
-# Animate paramters from network analysis
-
-# Can we view both animations? 
+# Different analysis measurement ideas
+# 1. Measure the center of masses of each party, track center of mass positions in time [Mike]
+# 2. Measure strength of connectivity between congress man (strenght = 1/percent same votes) [Ethan]
 
 
+# 1. "Center of Mass" Caclulations
+
+# Take each congress.
+# Take every party within that congress.
+# Measure the center of mass position of each party.
+
+Rcm <- list()
+i = 0
+for (con in unique(dat$congress))
+{
+  i = i+1
+#  print(con)
+  tmp = dat[dat$congress==con,]
+  Rcmp <- list()
+  j = 0
+  for (par in unique(tmp$party_code))
+  {
+    j=j+1
+#    print(par)
+    tmpp = tmp[tmp$party_code==par,]
+#    print( cat("sums: ", sum(tmpp$nominate_dim1,na.rm=TRUE),"  , " , sum(tmpp$nominate_dim2,na.rm=TRUE)) )
+    Rcmp[[j]] = c( sum(tmpp$nominate_dim1,na.rm=TRUE)/length(tmpp$nominate_dim1[!is.na(tmpp$nominate_dim1)]), sum(tmpp$nominate_dim2,na.rm=TRUE)/length(tmpp$nominate_dim2[!is.na(tmpp$nominate_dim2)]) )
+  }
+  Rcm[[i]] = Rcmp
+}
 
 
+#############################
 
+## Parameter Analysis
+
+## Animate Center of Mass Parameter
+# Make Plots
+{
+plt <- list()
+for (con in unique(dat$congress)) 
+local({
+  tmp = dat[dat$congress==con,]
+  pl_tmp <- ggplot( tmp, aes(x = tmp$nominate_dim1, y =tmp$nominate_dim2,color=factor(tmp$party_code)),asp=1) +
+    geom_point()+
+    annotate("path",x=cos(seq(0,2*pi,length.out=100)),y=sin(seq(0,2*pi,length.out=100)))+
+    geom_hline(yintercept =0) + geom_vline(xintercept=0)+
+    xlab("DWNominate Dim. 1") + ylab("DWNominate Dim. 2")+
+    labs(title=paste(c('Congress Number ',con),collapse=" "),color="Party Code")
+  for (i in 1:length(Rcm[[con]]) )
+  local({
+    dwnom1 = Rcm[[con]][[i]][[1]]
+    dwnom2 = Rcm[[con]][[i]][[2]]
+    col_code = unique(tmp$party_code)[i]
+    pl_tmp <<- pl_tmp + geom_point(aes(x=dwnom1,y=dwnom2, fill=factor( col_code ) ),color="black",pch=21,size=4)+guides(fill=FALSE)
+  })
+  plt[[con]] <<- pl_tmp
+})
+plt[[116]]
+}
+
+
+## Can I animate the above plots?
+# I cannot animate the plots the same way I did before and include the center of masses.
+
+## Show evolution of parameters in time.
+
+#############################
 # Icing on the top kind of things:
 # 1. use tweenr for smooth transitions between congressman
