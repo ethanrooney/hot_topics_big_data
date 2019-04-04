@@ -17,7 +17,7 @@ dat = read.csv("../project/project-directory/HSall_members.csv", header = TRUE)
 # To grab a specific column of data I use data_name$column_name
 cong.num = dat$congress
 
- # Let's grab all the DWNominate_dim1 scores for the first congress.
+# Let's grab all the DWNominate_dim1 scores for the first congress.
 DWN1.first = subset(dat$nominate_dim1, dat$congress < 2)
 # If you look at the first entry of the data, it's NA, Let's set that to zero.
 # We could remove or ignore that, but to make things easy for now, let's set it to zero. 
@@ -121,6 +121,7 @@ congresstime <- ggplot( dat, aes(x = dat$nominate_dim1, y =dat$nominate_dim2,col
 # Measure the center of mass position of each party.
 
 Rcm <- list()
+params <- list()
 i = 0
 for (con in unique(dat$congress))
 {
@@ -128,17 +129,20 @@ for (con in unique(dat$congress))
 #  print(con)
   tmp = dat[dat$congress==con,]
   Rcmp <- list()
+  paramsp <- list()
   j = 0
   for (par in unique(tmp$party_code))
   {
     j=j+1
-#    print(par)
     tmpp = tmp[tmp$party_code==par,]
-#    print( cat("sums: ", sum(tmpp$nominate_dim1,na.rm=TRUE),"  , " , sum(tmpp$nominate_dim2,na.rm=TRUE)) )
     Rcmp[[j]] = c( sum(tmpp$nominate_dim1,na.rm=TRUE)/length(tmpp$nominate_dim1[!is.na(tmpp$nominate_dim1)]), sum(tmpp$nominate_dim2,na.rm=TRUE)/length(tmpp$nominate_dim2[!is.na(tmpp$nominate_dim2)]) )
+    paramsp[[j]] = c(con, sqrt( (sum(tmpp$nominate_dim1,na.rm=TRUE)/length(tmpp$nominate_dim1[!is.na(tmpp$nominate_dim1)]))^2 + (sum(tmpp$nominate_dim2,na.rm=TRUE)/length(tmpp$nominate_dim2[!is.na(tmpp$nominate_dim2)]) )^2 ), par)
   }
   Rcm[[i]] = Rcmp
+  params[[i]] = paramsp
 }
+
+
 
 
 #############################
@@ -175,6 +179,26 @@ plt[[116]]
 # I cannot animate the plots the same way I did before and include the center of masses.
 
 ## Show evolution of parameters in time.
+
+
+{
+  plt_burst <- plot(params[[1]][[1]][1],params[[1]][[1]][2],xlim=c(1,length(params)),ylim=c(0,1),xlab='Congress',ylab='Center of Mass Distance')
+  for (i in 1:length(params))
+  local({
+#    for (j in 1:length(params[[i]])) # For all the parties of each congress
+    for (j in 1:2) # For just the first two parties in a congress, (these are probably the largest parties, but not always)
+    local({
+      print("congress: ")
+      print(i)
+#      plt_burst <<- points(params[[i]][[j]][1], params[[i]][[j]][2],pch = 19,col= 200 ) 
+       plt_burst <<- points(params[[i]][[j]][1], params[[i]][[j]][2],pch = 19,col= unique(dat[dat$congress==i,"party_code"])[j]) 
+       print(unique(dat[dat$congress==i,"party_code"])[j] )
+    })
+  })
+}
+
+
+
 
 #############################
 # Icing on the top kind of things:
