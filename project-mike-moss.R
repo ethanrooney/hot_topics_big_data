@@ -171,7 +171,11 @@ local({
   })
   plt[[con]] <<- pl_tmp
 })
-plt[[116]]
+# plt[[18]] # Many Parties
+plt[[13]] # War of 1812, very polarized
+plt[[36]] # Many Parties, coincides with a netowrk plot used in a poster.
+plt[[88]] # Civil Right Movement
+plt[[114]] # Current congress
 }
 
 
@@ -180,23 +184,32 @@ plt[[116]]
 
 ## Show evolution of parameters in time.
 
-
 {
-  plt_burst <- plot(params[[1]][[1]][1],params[[1]][[1]][2],xlim=c(1,length(params)),ylim=c(0,1),xlab='Congress',ylab='Center of Mass Distance')
-  for (i in 1:length(params))
+  plt_burst <- plot(params[[1]][[1]][1],params[[1]][[1]][2],pch = 18 ,xlim=c(1,length(params)),
+                    ylim=c(0,1),xlab='Congress',ylab='Center of Mass Distance (CoM)',
+                    main=('CoM to Origin Distance for Two Largest Parties'),cex.main=1)
+  grid(col='gray')
+  legend(1,legend=('CoM Distance Between Two Largest Parties'),pch=18,col='red',cex=.75)
+  for (i in 1:length(params)) # congress number
   local({
-#    for (j in 1:length(params[[i]])) # For all the parties of each congress
-    for (j in 1:2) # For just the first two parties in a congress, (these are probably the largest parties, but not always)
-    local({
-      print("congress: ")
-      print(i)
-#      plt_burst <<- points(params[[i]][[j]][1], params[[i]][[j]][2],pch = 19,col= 200 ) 
-       plt_burst <<- points(params[[i]][[j]][1], params[[i]][[j]][2],pch = 19,col= unique(dat[dat$congress==i,"party_code"])[j]) 
-       print(unique(dat[dat$congress==i,"party_code"])[j] )
-    })
+    # Sort the party codes of the congress men in this conrgressfrom most members to least:
+    c = rownames(sort(table(dat[dat$congress==i,]$party_code),decreasing = T)) 
+    a = 0
+    for (j in 1:length(params[[i]])) # For all the parties of each congress
+#    local({
+      if (params[[i]][[j]][3] == c[1] | params[[i]][[j]][3] == c[2]  ) # ensures we are only looking at the largest parties.
+      {
+        # plot the distance from the origin of the two main parties.
+        plt_burst <<- points(params[[i]][[j]][1], params[[i]][[j]][2],pch = 18 ,col= unique(dat[dat$congress==i,"party_code"])[j]) 
+        print (params[[i]][[j]][2])
+        a = a + (params[[i]][[j]][2])^2
+      }
+#    })
+    # Plot the distance between the two parties
+    print(a)
+    plt_burst <<- points(params[[i]][[j]][1],sqrt(a),pch = 18 ,col= 'red') 
   })
 }
-
 
 
 
